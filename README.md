@@ -109,6 +109,26 @@ This project automates the end-to-end provisioning of a GPU-enabled Kubernetes c
 
 ---
 
+## 📊 Observability & Metrics Screenshots
+
+### 1. Prometheus - vLLM Token Generation Rate (`vllm:generation_tokens_total`)
+![vLLM Generation Tokens Total Metric](./Screenshot%202026-08-28%20100125.png)
+*Prometheus time-series graph tracking real-time LLM token generation count from the `vllm-service` endpoint.*
+
+### 2. Prometheus - End-to-End LLM Request Latency (p95 `vllm:e2e_request_latency_seconds`)
+![vLLM End-to-End Request Latency p95 Metric](./Screenshot%202026-08-28%20101822.png)
+*p95 request latency query (`histogram_quantile(0.95, sum(rate(vllm:e2e_request_latency_seconds_bucket[5m])) by (le))`) measuring model response times.*
+
+### 3. NVIDIA DCGM Exporter - Hardware Metrics Stream (`localhost:9400/metrics`)
+![NVIDIA DCGM Exporter Endpoint](./Screenshot%202026-08-28%20172909.png)
+*Live Prometheus metrics endpoint exposed by NVIDIA DCGM Exporter detailing GPU utilization, VRAM usage (`DCGM_FI_DEV_FB_USED`), temperature, and active Tensor Core pipelines.*
+
+### 4. Grafana Dashboards - Cluster & CoreDNS Monitoring
+![Grafana Dashboards UI](./Screenshot%202026-08-28%20230014.png)
+*Grafana monitoring dashboard visualizing cluster network requests, response durations, and system health.*
+
+---
+
 ## 🛠️ How to Deploy & Use This Project
 
 ### Prerequisites
