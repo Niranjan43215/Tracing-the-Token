@@ -1,0 +1,116 @@
+<mxfile host="app.diagrams.net" modified="2026-09-06T11:50:00.000Z" agent="Antigravity" version="21.0.0" type="device">
+  <diagram id="TracingTheTokenArch" name="Tracing the Token Architecture">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- AWS Region Container -->
+        <mxCell id="aws_cloud" value="AWS Region: us-east-1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F7FAFC;strokeColor=#FF9900;strokeWidth=3;fontStyle=1;fontSize=14;startSize=30;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1320" height="820" as="geometry" />
+        </mxCell>
+
+        <!-- AWS VPC Container -->
+        <mxCell id="vpc" value="AWS VPC (10.0.0.0/16) - tracing-token-vpc" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EBF8FF;strokeColor=#3182CE;strokeWidth=2;fontStyle=1;fontSize=13;startSize=30;collapsible=0;" vertex="1" parent="aws_cloud">
+          <mxGeometry x="30" y="50" width="1260" height="740" as="geometry" />
+        </mxCell>
+
+        <!-- Public Subnets Container -->
+        <mxCell id="public_subnets" value="Public Subnets (10.0.101.0/24, 10.0.102.0/24)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEFCBF;strokeColor=#D69E2E;strokeWidth=2;fontStyle=1;fontSize=12;startSize=25;collapsible=0;" vertex="1" parent="vpc">
+          <mxGeometry x="30" y="40" width="1200" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="igw" value="Internet Gateway (IGW)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECC94B;strokeColor=#B7791F;fontStyle=1;fontSize=11;" vertex="1" parent="public_subnets">
+          <mxGeometry x="40" y="35" width="180" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="nat_gw" value="Managed NAT Gateway&#xa;(Private Subnet Egress)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ED8936;strokeColor=#C05621;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="public_subnets">
+          <mxGeometry x="270" y="35" width="200" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- EKS Cluster Container -->
+        <mxCell id="eks_cluster" value="Amazon EKS Cluster (v1.31) - tracing-token-cluster" style="swimlane;whiteSpace=wrap;html=1;fillColor=#EDF2F7;strokeColor=#4A5568;strokeWidth=2;fontStyle=1;fontSize=13;startSize=30;collapsible=0;" vertex="1" parent="vpc">
+          <mxGeometry x="30" y="170" width="1200" height="540" as="geometry" />
+        </mxCell>
+
+        <!-- System Node Group -->
+        <mxCell id="system_node_group" value="System Node Group (t3.large) | role = system" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E6FFFA;strokeColor=#319795;strokeWidth=2;fontStyle=1;fontSize=12;startSize=35;collapsible=0;" vertex="1" parent="eks_cluster">
+          <mxGeometry x="30" y="45" width="550" height="470" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ns_monitoring" value="Namespace: monitoring" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#718096;fontStyle=1;startSize=25;collapsible=0;" vertex="1" parent="system_node_group">
+          <mxGeometry x="20" y="50" width="510" height="400" as="geometry" />
+        </mxCell>
+
+        <mxCell id="prometheus" value="Prometheus Server&#xa;(kube-prometheus-stack)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3182CE;strokeColor=#2B6CB0;fontColor=#ffffff;fontStyle=1;fontSize=12;" vertex="1" parent="ns_monitoring">
+          <mxGeometry x="30" y="45" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="grafana" value="Grafana Dashboard&#xa;(Port 3000 / ClusterIP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F6AD55;strokeColor=#DD6B20;fontColor=#1A202C;fontStyle=1;fontSize=12;" vertex="1" parent="ns_monitoring">
+          <mxGeometry x="280" y="45" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dcgm_monitor" value="DCGM ServiceMonitor&#xa;(Interval: 15s | Port: metrics)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4FD1C5;strokeColor=#319795;fontColor=#1A202C;fontStyle=1;fontSize=11;" vertex="1" parent="ns_monitoring">
+          <mxGeometry x="30" y="165" width="200" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vllm_monitor" value="vLLM ServiceMonitor&#xa;(Interval: 15s | Path: /metrics)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B794F4;strokeColor=#805AD5;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="ns_monitoring">
+          <mxGeometry x="280" y="165" width="200" height="65" as="geometry" />
+        </mxCell>
+
+        <mxCell id="prom_values" value="Custom Values Config (prometheus-values.yaml)&#xa;serviceMonitorSelectorNilUsesHelmValues: false" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CBD5E0;strokeColor=#4A5568;fontStyle=0;fontSize=11;" vertex="1" parent="ns_monitoring">
+          <mxGeometry x="30" y="270" width="450" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- GPU Inference Node Group -->
+        <mxCell id="gpu_node_group" value="GPU Inference Node Group (g5.xlarge) | workload = gpu&#xa;Taint: nvidia.com/gpu=true:NoSchedule" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#805AD5;strokeWidth=2;fontStyle=1;fontSize=12;startSize=35;collapsible=0;" vertex="1" parent="eks_cluster">
+          <mxGeometry x="620" y="45" width="550" height="470" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ns_default" value="Namespace: default" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E2E8F0;strokeColor=#718096;fontStyle=1;startSize=25;collapsible=0;" vertex="1" parent="gpu_node_group">
+          <mxGeometry x="20" y="50" width="510" height="175" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vllm_pod" value="vLLM Inference Pod&#xa;• Image: vllm/vllm-openai:latest&#xa;• Model: Qwen/Qwen2.5-0.5B-Instruct&#xa;• GPU Allocation: 1x NVIDIA GPU&#xa;• Service Port: 8000 (OpenAI API)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6B46C1;strokeColor=#553C9A;fontColor=#ffffff;fontStyle=1;align=left;spacingLeft=12;fontSize=11;" vertex="1" parent="ns_default">
+          <mxGeometry x="25" y="35" width="460" height="115" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dcgm_exporter" value="NVIDIA DCGM Exporter (DaemonSet)&#xa;• Image: nvcr.io/nvidia/k8s/dcgm-exporter:4.6.0-4.8.3-distroless&#xa;• Port: 9400 (Metrics) | Capabilities: SYS_ADMIN&#xa;• Host Volume Mount: /var/lib/kubelet/pod-resources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#38A169;strokeColor=#276749;fontColor=#ffffff;fontStyle=1;align=left;spacingLeft=12;fontSize=11;" vertex="1" parent="gpu_node_group">
+          <mxGeometry x="20" y="250" width="510" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gpu_hardware" value="NVIDIA A10G GPU Hardware (24GB VRAM)" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#48BB78;strokeColor=#2F855A;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="gpu_node_group">
+          <mxGeometry x="130" y="385" width="290" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Connections / Arrows -->
+        <mxCell id="edge_prom_grafana" value="Query Metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthoLoop=1;jettySize=auto;html=1;strokeColor=#DD6B20;strokeWidth=2;fontStyle=1;" edge="1" parent="ns_monitoring" source="grafana" target="prometheus">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_scrape_vllm" value="Scrape vLLM Token Metrics (Port 8000 /metrics)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#805AD5;strokeWidth=3;fontStyle=1;fontSize=11;" edge="1" parent="eks_cluster" source="prometheus" target="vllm_pod">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="145" />
+              <mxPoint x="895" y="145" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="edge_scrape_dcgm" value="Scrape Hardware GPU Metrics (Port 9400)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#38A169;strokeWidth=3;fontStyle=1;fontSize=11;" edge="1" parent="eks_cluster" source="prometheus" target="dcgm_exporter">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="150" y="415" />
+              <mxPoint x="895" y="415" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="edge_dcgm_hardware" value="Monitor GPU &amp; Pod Mapping" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthoLoop=1;jettySize=auto;html=1;strokeColor=#2F855A;strokeWidth=2;entryX=0.5;entryY=0;" edge="1" parent="gpu_node_group" source="dcgm_exporter" target="gpu_hardware">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
