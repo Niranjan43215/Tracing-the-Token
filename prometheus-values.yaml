@@ -1,0 +1,9 @@
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    # Remove or comment out nodeSelector entirely so it goes to default system nodes
+grafana:
+  enabled: true
+  service:
+    type: ClusterIP
