@@ -17,33 +17,53 @@ This project automates the end-to-end provisioning of a GPU-enabled Kubernetes c
 
 ---
 
-## 🏗️ Architecture Diagram
+## ☁️ AWS Services & Network Routing Architecture
+
+### AWS Services Utilized:
+* 🌐 **AWS VPC (`tracing-token-vpc`)**: Primary network boundary (`10.0.0.0/16`) spanning 2 Availability Zones (`us-east-1a`, `us-east-1b`).
+* 🛜 **AWS Internet Gateway (IGW)**: Connects public subnets to the public internet.
+* ⚖️ **AWS Application Load Balancer (ALB)**: Public ingress endpoint (`kubernetes.io/role/elb=1`) routing HTTP requests into private Kubernetes services.
+* 🔒 **AWS Managed NAT Gateway**: Situated in Public Subnet (`10.0.101.0/24`) to give private worker nodes secure outbound egress to fetch model weights and container images without exposing them to public inbound access.
+* ☸️ **Amazon EKS (`tracing-token-cluster`)**: Managed Kubernetes control plane running Kubernetes `v1.31`.
+* 💻 **AWS EC2 Auto Scaling Node Groups**:
+  * **System Node Pool**: `t3.large` instances for monitoring workloads (`monitoring` namespace).
+  * **GPU Inference Node Pool**: `g5.xlarge` instances equipped with NVIDIA A10G GPUs (24GB GDDR6 VRAM) for LLM inference workloads.
+
+---
+
+### 🔀 Step-by-Step End-to-End Network Routing Flow
 
 ```
-                         +-----------------------------------------------+
-                         |               AWS Cloud VPC                   |
-                         |               (10.0.0.0/16)                   |
-                         +-----------------------+-----------------------+
-                                                 |
-                         +-----------------------v-----------------------+
-                         |             Amazon EKS Cluster                |
-                         +-----------------------+-----------------------+
-                                                 |
-         +---------------------------------------+---------------------------------------+
-         |                                                                               |
-         v                                                                               v
-+-------------------------------+                               +-------------------------------+
-|       System Node Group       |                               |       GPU Inference Group     |
-|          (t3.large)           |                               |         (g5.xlarge GPU)       |
-+-------------------------------+                               +-------------------------------+
-| • kube-prometheus-stack       |                               | • vLLM Server (Qwen2.5-0.5B)  |
-| • Prometheus Operator         |                               | • NVIDIA DCGM Exporter        |
-| • Grafana Dashboards          |                               |   (DaemonSet on port 9400)    |
-+---------------+---------------+                               +---------------+---------------+
-                ^                                                               ^
-                |                                                               |
-                +================ Scrapes via ServiceMonitors ==================+
+[ External User ] ------ (1. Prompt Request /v1/chat/completions) -------> [ AWS IGW ]
+                                                                             |
+                                                                             v
+[ vLLM Inference Pod ] <--- (3. Ingress Route) --- [ AWS ALB ] <--- (2. Public Subnet)
+ (g5.xlarge GPU Node)
+        |
+        +---- (6. Outbound Pull) ---> [ Private Route Table ] ---> [ NAT Gateway ] ---> [ HuggingFace Hub ]
+                                                                     (Public Subnet)      (Qwen2.5 Weights)
+
+[ Prometheus Server ] --- (8. Scrape Token Metrics Port 8000) ----> [ vLLM Service ]
+ (t3.large System Node) -- (9. Scrape GPU Metrics Port 9400) ------> [ DCGM Exporter ]
 ```
+
+1. **User Prompt Request Ingress**:
+   - Client sends an OpenAI-compatible prompt request (`/v1/chat/completions`) to AWS Route 53 / Internet Gateway.
+   - Traffic enters the AWS Application Load Balancer (ALB) in the Public Subnets.
+   - The ALB routes traffic across private subnets directly to the **vLLM Inference Pod** on TCP Port `8000`.
+
+2. **Admin Observability Access**:
+   - DevOps Administrator connects via ALB or Port-forwarding to the **Grafana Service** (Port `3000`) in the `monitoring` namespace.
+   - Grafana queries metrics from **Prometheus Server**.
+
+3. **Outbound Egress Routing (Model & Image Fetch)**:
+   - When vLLM starts up, it requests model weights (`Qwen/Qwen2.5-0.5B-Instruct`) from HuggingFace.
+   - Outbound traffic routes from the Private Subnet -> Private Route Table (`0.0.0.0/0`) -> AWS NAT Gateway in Public Subnet -> Internet Gateway (IGW) -> HuggingFace / Container Registries.
+
+4. **Internal Cluster Scrape Routing**:
+   - **Prometheus** uses ServiceMonitors to scrape metrics every 15 seconds.
+   - Scrapes **vLLM Pod** at `http://<pod-ip>:8000/metrics` for token generation metrics.
+   - Scrapes **DCGM Exporter DaemonSet** at `http://<node-ip>:9400/metrics` for low-level GPU hardware telemetry.
 
 ---
 
@@ -162,5 +182,6 @@ tracing-the-token/
 ├── vllm-servicemonitor.yaml     # ServiceMonitor for vLLM metrics
 ├── prometheus-values.yaml       # Helm configuration for kube-prometheus-stack
 ├── .gitignore                   # Ignores terraform state and binary caches
+├── architecture.drawio          # Draw.io XML Architecture Diagram with AWS Services & Routing
 └── README.md                    # Detailed project documentation
 ```
