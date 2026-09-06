@@ -1,224 +1,243 @@
-<mxfile host="app.diagrams.net" modified="2026-09-06T12:23:00.000Z" agent="Antigravity" version="21.0.0" type="device">
-  <diagram id="TracingTheTokenAWS4Arch" name="AWS &amp; EKS Official AWS4 Stencils">
-    <mxGraphModel dx="1600" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+<mxfile host="app.diagrams.net" modified="2026-09-06T12:35:00.000Z" agent="Antigravity" version="21.0.0" type="device">
+  <diagram id="TracingTheToken10Outof10Arch" name="Production Multi-AZ EKS GPU LLM Architecture">
+    <mxGraphModel dx="1800" dy="1300" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1300" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
-        <!-- EXTERNAL CLIENTS & SERVICES LAYER -->
-        <mxCell id="external_layer" value="External Clients, Admin &amp; Model Registry Layer" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;strokeWidth=2;fontStyle=1;fontSize=13;startSize=30;collapsible=0;" vertex="1" parent="1">
-          <mxGeometry x="40" y="40" width="1520" height="120" as="geometry" />
+        <!-- EXTERNAL CLIENTS & MODEL REGISTRIES LAYER -->
+        <mxCell id="external_layer" value="External Clients, Admin &amp; Third-Party Registries" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;strokeWidth=2;fontStyle=1;fontSize=13;startSize=30;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1720" height="110" as="geometry" />
         </mxCell>
 
-        <!-- User Client Icon -->
-        <mxCell id="user_client" value="Client App&#xa;(Prompt Requests)" style="outlineConnect=0;fontColor=#1E293B;fillColor=#2563EB;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;shape=mxgraph.aws4.user;" vertex="1" parent="external_layer">
-          <mxGeometry x="50" y="40" width="50" height="50" as="geometry" />
+        <mxCell id="user_client" value="Client / LLM App&#xa;(Prompt Requests /v1/chat)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2563EB;strokeColor=#1D4ED8;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="external_layer">
+          <mxGeometry x="30" y="40" width="200" height="50" as="geometry" />
         </mxCell>
 
-        <!-- Route 53 Icon -->
-        <mxCell id="route53" value="AWS Route 53&#xa;(DNS Routing)" style="outlineConnect=0;fontColor=#1E293B;fillColor=#8C4FFF;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;shape=mxgraph.aws4.route_53;" vertex="1" parent="external_layer">
-          <mxGeometry x="270" y="40" width="50" height="50" as="geometry" />
+        <mxCell id="route53" value="AWS Route 53&#xa;(Global DNS &amp; Health Checks)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7C3AED;strokeColor=#5B21B6;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="external_layer">
+          <mxGeometry x="260" y="40" width="200" height="50" as="geometry" />
         </mxCell>
 
-        <!-- Admin User Icon -->
-        <mxCell id="admin_user" value="DevOps Admin&#xa;(Grafana Port 3000)" style="outlineConnect=0;fontColor=#1E293B;fillColor=#DD6B20;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;shape=mxgraph.aws4.user;" vertex="1" parent="external_layer">
-          <mxGeometry x="480" y="40" width="50" height="50" as="geometry" />
+        <mxCell id="admin_user" value="DevOps Administrator&#xa;(Grafana UI Port 3000)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EA580C;strokeColor=#C2410C;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="external_layer">
+          <mxGeometry x="490" y="40" width="210" height="50" as="geometry" />
         </mxCell>
 
-        <!-- HuggingFace Box -->
-        <mxCell id="huggingface" value="🤗 HuggingFace Hub&#xa;(Qwen2.5-0.5B Model Weights)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF08A;strokeColor=#CA8A04;fontColor=#854D0E;fontStyle=1;fontSize=11;" vertex="1" parent="external_layer">
-          <mxGeometry x="1040" y="40" width="210" height="55" as="geometry" />
+        <mxCell id="huggingface" value="🤗 HuggingFace Hub&#xa;(Model: Qwen/Qwen2.5-0.5B-Instruct)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF08A;strokeColor=#CA8A04;fontColor=#854D0E;fontStyle=1;fontSize=11;" vertex="1" parent="external_layer">
+          <mxGeometry x="1220" y="40" width="240" height="50" as="geometry" />
         </mxCell>
 
-        <!-- Container Registry Box -->
-        <mxCell id="container_registry" value="🐳 NVIDIA Registry&#xa;(nvcr.io / DockerHub)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#15803D;strokeColor=#166534;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="external_layer">
-          <mxGeometry x="1280" y="40" width="210" height="55" as="geometry" />
+        <mxCell id="container_registry" value="🐳 NVIDIA NGC Registry&#xa;(nvcr.io / DockerHub Images)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#15803D;strokeColor=#166534;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="external_layer">
+          <mxGeometry x="1480" y="40" width="210" height="50" as="geometry" />
         </mxCell>
 
         <!-- AWS CLOUD REGION CONTAINER -->
         <mxCell id="aws_region" value="AWS Cloud Region: us-east-1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#F59E0B;strokeWidth=3;fontStyle=1;fontSize=14;startSize=35;collapsible=0;" vertex="1" parent="1">
-          <mxGeometry x="40" y="180" width="1520" height="980" as="geometry" />
+          <mxGeometry x="40" y="180" width="1720" height="1080" as="geometry" />
         </mxCell>
 
-        <!-- AWS INTERNET GATEWAY ICON -->
-        <mxCell id="igw" value="AWS Internet Gateway (IGW)" style="outlineConnect=0;fontColor=#1E293B;fillColor=#F26200;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;shape=mxgraph.aws4.internet_gateway;" vertex="1" parent="aws_region">
-          <mxGeometry x="60" y="45" width="50" height="50" as="geometry" />
+        <!-- AWS INTERNET GATEWAY -->
+        <mxCell id="igw" value="AWS Internet Gateway (IGW) - Public Boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#D97706;fontColor=#ffffff;fontStyle=1;fontSize=12;" vertex="1" parent="aws_region">
+          <mxGeometry x="40" y="45" width="340" height="45" as="geometry" />
         </mxCell>
 
         <!-- AWS VPC CONTAINER -->
         <mxCell id="vpc" value="AWS VPC (10.0.0.0/16) - tracing-token-vpc" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#0284C7;strokeWidth=2;fontStyle=1;fontSize=13;startSize=30;collapsible=0;" vertex="1" parent="aws_region">
-          <mxGeometry x="30" y="115" width="1460" height="835" as="geometry" />
+          <mxGeometry x="30" y="105" width="1660" height="945" as="geometry" />
         </mxCell>
 
-        <!-- PUBLIC SUBNETS LAYER -->
-        <mxCell id="public_subnets" value="Public Subnets (10.0.101.0/24 &amp; 10.0.102.0/24 in us-east-1a, us-east-1b) | Tag: kubernetes.io/role/elb=1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEFCE8;strokeColor=#CA8A04;strokeWidth=2;fontStyle=1;fontSize=12;startSize=30;collapsible=0;" vertex="1" parent="vpc">
-          <mxGeometry x="30" y="45" width="1400" height="125" as="geometry" />
+        <!-- AZ-1 CONTAINER -->
+        <mxCell id="az1" value="Availability Zone 1: us-east-1a" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#0284C7;strokeWidth=2;fontStyle=1;fontSize=12;startSize=30;collapsible=0;" vertex="1" parent="vpc">
+          <mxGeometry x="30" y="45" width="790" height="880" as="geometry" />
         </mxCell>
 
-        <!-- ALB ICON -->
-        <mxCell id="alb" value="AWS Application Load Balancer (ALB)&#xa;[Public Ingress Controller - HTTP 80/443]" style="outlineConnect=0;fontColor=#1E293B;fillColor=#2E27AD;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;shape=mxgraph.aws4.application_load_balancer;" vertex="1" parent="public_subnets">
-          <mxGeometry x="50" y="40" width="50" height="50" as="geometry" />
+        <!-- AZ-1 PUBLIC SUBNET -->
+        <mxCell id="pub_subnet_1" value="Public Subnet 1 (10.0.101.0/24) | Tag: kubernetes.io/role/elb=1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEFCE8;strokeColor=#CA8A04;strokeWidth=2;fontStyle=1;fontSize=11;startSize=25;collapsible=0;" vertex="1" parent="az1">
+          <mxGeometry x="20" y="40" width="750" height="110" as="geometry" />
         </mxCell>
 
-        <!-- Public Route Table -->
-        <mxCell id="public_route_table" value="Public Route Table&#xa;0.0.0.0/0 -&gt; IGW" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F97316;strokeColor=#EA580C;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="public_subnets">
-          <mxGeometry x="410" y="40" width="220" height="60" as="geometry" />
+        <mxCell id="alb_az1" value="AWS Application Load Balancer (ALB Node A)&#xa;[Targeting Port 8000 &amp; Port 3000]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2563EB;strokeColor=#1D4ED8;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="pub_subnet_1">
+          <mxGeometry x="20" y="35" width="340" height="60" as="geometry" />
         </mxCell>
 
-        <!-- NAT GATEWAY ICON -->
-        <mxCell id="nat_gw" value="AWS Managed NAT Gateway&#xa;(Outbound Egress for Private Subnets)" style="outlineConnect=0;fontColor=#1E293B;fillColor=#F26200;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=1;shape=mxgraph.aws4.nat_gateway;" vertex="1" parent="public_subnets">
-          <mxGeometry x="980" y="40" width="50" height="50" as="geometry" />
+        <mxCell id="pub_rt_1" value="Public Route Table 1&#xa;0.0.0.0/0 -&gt; IGW" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F97316;strokeColor=#EA580C;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="pub_subnet_1">
+          <mxGeometry x="380" y="35" width="350" height="60" as="geometry" />
         </mxCell>
 
-        <!-- PRIVATE SUBNETS LAYER -->
-        <mxCell id="private_subnets" value="Private Subnets (10.0.1.0/24 &amp; 10.0.2.0/24 in us-east-1a, us-east-1b) | Tag: kubernetes.io/role/internal-elb=1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=12;startSize=30;collapsible=0;" vertex="1" parent="vpc">
-          <mxGeometry x="30" y="185" width="1400" height="635" as="geometry" />
+        <!-- AZ-1 PRIVATE SUBNET -->
+        <mxCell id="priv_subnet_1" value="Private Subnet 1 (10.0.1.0/24) | Tag: kubernetes.io/role/internal-elb=1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=11;startSize=25;collapsible=0;" vertex="1" parent="az1">
+          <mxGeometry x="20" y="165" width="750" height="695" as="geometry" />
         </mxCell>
 
-        <!-- Private Route Table -->
-        <mxCell id="private_route_table" value="Private Subnet Route Table: 0.0.0.0/0 -&gt; AWS Managed NAT Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748B;strokeColor=#334155;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="private_subnets">
-          <mxGeometry x="30" y="40" width="1340" height="45" as="geometry" />
+        <mxCell id="priv_rt_1" value="Private Subnet Route Table 1: 0.0.0.0/0 -&gt; Managed NAT Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748B;strokeColor=#334155;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="priv_subnet_1">
+          <mxGeometry x="20" y="35" width="710" height="40" as="geometry" />
         </mxCell>
 
-        <!-- EKS CLUSTER CONTAINER -->
-        <mxCell id="eks_cluster" value="Amazon EKS Cluster (Kubernetes v1.31) - tracing-token-cluster" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#334155;strokeWidth=2;fontStyle=1;fontSize=13;startSize=30;collapsible=0;" vertex="1" parent="private_subnets">
-          <mxGeometry x="30" y="95" width="1340" height="515" as="geometry" />
+        <!-- AZ-2 CONTAINER -->
+        <mxCell id="az2" value="Availability Zone 2: us-east-1b" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#0284C7;strokeWidth=2;fontStyle=1;fontSize=12;startSize=30;collapsible=0;" vertex="1" parent="vpc">
+          <mxGeometry x="840" y="45" width="790" height="880" as="geometry" />
         </mxCell>
 
-        <!-- EKS CONTROL PLANE ICON -->
-        <mxCell id="eks_control_plane" value="AWS Managed EKS Control Plane (API Server, etcd, Controller Manager)" style="outlineConnect=0;fontColor=#1E293B;fillColor=#F26200;strokeColor=none;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=1;shape=mxgraph.aws4.eks;" vertex="1" parent="eks_cluster">
-          <mxGeometry x="30" y="38" width="45" height="45" as="geometry" />
+        <!-- AZ-2 PUBLIC SUBNET -->
+        <mxCell id="pub_subnet_2" value="Public Subnet 2 (10.0.102.0/24) | Tag: kubernetes.io/role/elb=1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FEFCE8;strokeColor=#CA8A04;strokeWidth=2;fontStyle=1;fontSize=11;startSize=25;collapsible=0;" vertex="1" parent="az2">
+          <mxGeometry x="20" y="40" width="750" height="110" as="geometry" />
         </mxCell>
 
-        <!-- SYSTEM NODE GROUP (EC2 ICON) -->
+        <mxCell id="nat_gw" value="AWS Managed NAT Gateway&#xa;(Elastic IP: Public Outbound Egress)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#D97706;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="pub_subnet_2">
+          <mxGeometry x="20" y="35" width="340" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="alb_az2" value="AWS Application Load Balancer (ALB Node B)&#xa;[Multi-AZ High Availability]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2563EB;strokeColor=#1D4ED8;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="pub_subnet_2">
+          <mxGeometry x="380" y="35" width="350" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- AZ-2 PRIVATE SUBNET -->
+        <mxCell id="priv_subnet_2" value="Private Subnet 2 (10.0.2.0/24) | Tag: kubernetes.io/role/internal-elb=1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#475569;strokeWidth=2;fontStyle=1;fontSize=11;startSize=25;collapsible=0;" vertex="1" parent="az2">
+          <mxGeometry x="20" y="165" width="750" height="695" as="geometry" />
+        </mxCell>
+
+        <mxCell id="priv_rt_2" value="Private Subnet Route Table 2: 0.0.0.0/0 -&gt; AWS Managed NAT Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#64748B;strokeColor=#334155;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="priv_subnet_2">
+          <mxGeometry x="20" y="35" width="710" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- EKS CLUSTER CONTAINER (SPANNING AZs) -->
+        <mxCell id="eks_cluster" value="Amazon EKS Cluster (Kubernetes v1.31) - tracing-token-cluster" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#1E293B;strokeWidth=2;fontStyle=1;fontSize=13;startSize=30;collapsible=0;" vertex="1" parent="vpc">
+          <mxGeometry x="50" y="280" width="1560" height="570" as="geometry" />
+        </mxCell>
+
+        <!-- EKS CONTROL PLANE -->
+        <mxCell id="eks_control_plane" value="AWS Managed EKS Control Plane (Kubernetes API Server, etcd, Controller Manager, CoreDNS, VPC CNI Plugin)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0F172A;strokeColor=#334155;fontColor=#ffffff;fontStyle=1;fontSize=12;" vertex="1" parent="eks_cluster">
+          <mxGeometry x="20" y="40" width="1520" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- SYSTEM NODE GROUP (AZ-1) -->
         <mxCell id="system_nodes" value="System Node Group (AWS EC2 t3.large Pool) | role = system" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F0FDFA;strokeColor=#0D9488;strokeWidth=2;fontStyle=1;fontSize=12;startSize=30;collapsible=0;" vertex="1" parent="eks_cluster">
-          <mxGeometry x="20" y="95" width="620" height="400" as="geometry" />
+          <mxGeometry x="20" y="100" width="730" height="445" as="geometry" />
         </mxCell>
 
         <mxCell id="ns_monitoring" value="Kubernetes Namespace: monitoring" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;startSize=25;collapsible=0;" vertex="1" parent="system_nodes">
-          <mxGeometry x="15" y="40" width="590" height="345" as="geometry" />
+          <mxGeometry x="15" y="40" width="700" height="385" as="geometry" />
         </mxCell>
 
         <mxCell id="grafana" value="📊 Grafana Dashboard Pod&#xa;(Port 3000 / ClusterIP Service)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F46800;strokeColor=#C2410C;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="ns_monitoring">
-          <mxGeometry x="20" y="35" width="260" height="75" as="geometry" />
+          <mxGeometry x="20" y="35" width="310" height="80" as="geometry" />
         </mxCell>
 
         <mxCell id="prometheus" value="🔥 Prometheus Server Pod&#xa;(kube-prometheus-stack)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E6522C;strokeColor=#B91C1C;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="ns_monitoring">
-          <mxGeometry x="305" y="35" width="265" height="75" as="geometry" />
+          <mxGeometry x="360" y="35" width="320" height="80" as="geometry" />
         </mxCell>
 
-        <mxCell id="servicemonitors" value="ServiceMonitors CRD Configuration&#xa;• dcgm-exporter ServiceMonitor (15s interval)&#xa;• vllm-servicemonitor (15s interval on /metrics)&#xa;• serviceMonitorSelectorNilUsesHelmValues: false" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#8B5CF6;strokeColor=#6D28D9;fontColor=#ffffff;fontStyle=1;align=left;spacingLeft=10;fontSize=10;" vertex="1" parent="ns_monitoring">
-          <mxGeometry x="20" y="130" width="550" height="85" as="geometry" />
+        <mxCell id="servicemonitors" value="ServiceMonitors CRD Configuration&#xa;• dcgm-exporter ServiceMonitor (15s interval)&#xa;• vllm-servicemonitor (15s interval on /metrics)&#xa;• serviceMonitorSelectorNilUsesHelmValues: false" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#8B5CF6;strokeColor=#6D28D9;fontColor=#ffffff;fontStyle=1;align=left;spacingLeft=12;fontSize=10;" vertex="1" parent="ns_monitoring">
+          <mxGeometry x="20" y="135" width="660" height="100" as="geometry" />
         </mxCell>
 
-        <mxCell id="prom_values" value="Prometheus Helm Values (prometheus-values.yaml)&#xa;Grafana Enabled | ClusterIP | ServiceMonitor Dynamic Discovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#475569;strokeColor=#1E293B;fontColor=#ffffff;fontStyle=0;fontSize=10;" vertex="1" parent="ns_monitoring">
-          <mxGeometry x="20" y="235" width="550" height="85" as="geometry" />
+        <mxCell id="prom_values" value="Prometheus Helm Values (prometheus-values.yaml)&#xa;Grafana Enabled | ClusterIP | Dynamic ServiceMonitor Discovery Across Namespaces" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#475569;strokeColor=#1E293B;fontColor=#ffffff;fontStyle=0;fontSize=10;" vertex="1" parent="ns_monitoring">
+          <mxGeometry x="20" y="255" width="660" height="100" as="geometry" />
         </mxCell>
 
-        <!-- GPU INFERENCE NODE GROUP (EC2 ICON) -->
-        <mxCell id="gpu_nodes" value="GPU Inference Node Group (AWS EC2 g5.xlarge Pool) | workload = gpu&#xa;Taint: nvidia.com/gpu=true:NoSchedule" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7C3AED;strokeWidth=2;fontStyle=1;fontSize=12;startSize=30;collapsible=0;" vertex="1" parent="eks_cluster">
-          <mxGeometry x="660" y="95" width="660" height="400" as="geometry" />
+        <!-- GPU INFERENCE NODE GROUP (AZ-2) -->
+        <mxCell id="gpu_nodes" value="GPU Inference Node Group (AWS EC2 g5.xlarge Pool) | workload = gpu&#xa;Taint: nvidia.com/gpu=true:NoSchedule | 100GB gp3 EBS Volume" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#7C3AED;strokeWidth=2;fontStyle=1;fontSize=12;startSize=30;collapsible=0;" vertex="1" parent="eks_cluster">
+          <mxGeometry x="800" y="100" width="740" height="445" as="geometry" />
         </mxCell>
 
         <mxCell id="ns_default" value="Kubernetes Namespace: default" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontStyle=1;startSize=25;collapsible=0;" vertex="1" parent="gpu_nodes">
-          <mxGeometry x="15" y="40" width="630" height="155" as="geometry" />
+          <mxGeometry x="15" y="40" width="710" height="170" as="geometry" />
         </mxCell>
 
-        <mxCell id="vllm_pod" value="⚡ vLLM Inference Pod (OpenAI API Server)&#xa;• Image: vllm/vllm-openai:latest | Model: Qwen/Qwen2.5-0.5B-Instruct&#xa;• Container Port: 8000 (TargetPort 8000) | Limits: nvidia.com/gpu: 1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7C3AED;strokeColor=#5B21B6;fontColor=#ffffff;fontStyle=1;align=left;spacingLeft=12;fontSize=11;" vertex="1" parent="ns_default">
-          <mxGeometry x="20" y="35" width="590" height="100" as="geometry" />
+        <mxCell id="vllm_pod" value="⚡ vLLM Inference Pod (OpenAI API Server)&#xa;• Image: vllm/vllm-openai:latest | Model: Qwen/Qwen2.5-0.5B-Instruct&#xa;• Args: --model Qwen/Qwen2.5-0.5B-Instruct --gpu-memory-utilization 0.8&#xa;• Container Port: 8000 (TargetPort 8000) | Limits: nvidia.com/gpu: 1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#7C3AED;strokeColor=#5B21B6;fontColor=#ffffff;fontStyle=1;align=left;spacingLeft=12;fontSize=11;" vertex="1" parent="ns_default">
+          <mxGeometry x="20" y="35" width="670" height="115" as="geometry" />
         </mxCell>
 
-        <mxCell id="dcgm_exporter" value="💚 NVIDIA DCGM Exporter (DaemonSet Pod)&#xa;• Image: nvcr.io/nvidia/k8s/dcgm-exporter:4.6.0-4.8.3-distroless&#xa;• Metrics Port: 9400 | Capabilities: SYS_ADMIN&#xa;• Host Volume Mount: /var/lib/kubelet/pod-resources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#15803D;strokeColor=#166534;fontColor=#ffffff;fontStyle=1;align=left;spacingLeft=12;fontSize=11;" vertex="1" parent="gpu_nodes">
-          <mxGeometry x="15" y="210" width="630" height="90" as="geometry" />
+        <mxCell id="dcgm_exporter" value="💚 NVIDIA DCGM Exporter (DaemonSet Pod)&#xa;• Image: nvcr.io/nvidia/k8s/dcgm-exporter:4.6.0-4.8.3-distroless&#xa;• Metrics Port: 9400 | Capabilities: SYS_ADMIN (Tensor Core Profiling)&#xa;• Host Volume Mount: /var/lib/kubelet/pod-resources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#15803D;strokeColor=#166534;fontColor=#ffffff;fontStyle=1;align=left;spacingLeft=12;fontSize=11;" vertex="1" parent="gpu_nodes">
+          <mxGeometry x="15" y="225" width="710" height="100" as="geometry" />
         </mxCell>
 
-        <mxCell id="nvidia_hardware" value="🎮 NVIDIA A10G GPU Hardware Acceleration (24GB GDDR6 VRAM)" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#76B900;strokeColor=#4D7C0F;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="gpu_nodes">
-          <mxGeometry x="15" y="315" width="630" height="65" as="geometry" />
+        <mxCell id="nvidia_hardware" value="🎮 NVIDIA A10G Tensor Core GPU Acceleration (24GB GDDR6 VRAM)" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;fillColor=#76B900;strokeColor=#4D7C0F;fontColor=#ffffff;fontStyle=1;fontSize=11;" vertex="1" parent="gpu_nodes">
+          <mxGeometry x="15" y="340" width="710" height="85" as="geometry" />
         </mxCell>
 
         <!-- ROUTING & TRAFFIC FLOW ARROWS -->
 
         <!-- ROUTE 1: User Prompt Ingress -->
-        <mxCell id="r1_user_igw" value="1. Prompt Request" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="1" source="user_client" target="igw">
+        <mxCell id="r1_user_igw" value="1. Prompt Request (/v1/chat/completions)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="1" source="user_client" target="igw">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="75" y="160" />
-              <mxPoint x="85" y="160" />
+              <mxPoint x="130" y="160" />
+              <mxPoint x="210" y="160" />
             </Array>
           </mxGeometry>
         </mxCell>
 
-        <mxCell id="r1_igw_alb" value="2. Public Ingress" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="aws_region" source="igw" target="alb">
+        <mxCell id="r1_igw_alb" value="2. Ingress Traffic" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="aws_region" source="igw" target="alb_az1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
-        <mxCell id="r1_alb_vllm" value="3. Route Traffic to vLLM Pod (Port 8000)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="vpc" source="alb" target="vllm_pod">
+        <mxCell id="r1_alb_vllm" value="3. Route Prompt Request to vLLM Inference Pod (Port 8000)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="vpc" source="alb_az1" target="vllm_pod">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="75" y="170" />
-              <mxPoint x="990" y="170" />
+              <mxPoint x="200" y="170" />
+              <mxPoint x="1200" y="170" />
             </Array>
           </mxGeometry>
         </mxCell>
 
         <!-- ROUTE 2: Admin Ingress -->
-        <mxCell id="r2_admin_igw" value="4. Grafana Access" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#DD6B20;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="1" source="admin_user" target="igw">
+        <mxCell id="r2_admin_igw" value="4. Admin Access (Grafana UI)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#EA580C;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="1" source="admin_user" target="igw">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="505" y="160" />
-              <mxPoint x="85" y="160" />
+              <mxPoint x="595" y="160" />
+              <mxPoint x="210" y="160" />
             </Array>
           </mxGeometry>
         </mxCell>
 
-        <mxCell id="r2_alb_grafana" value="5. Route to Grafana (Port 3000)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#DD6B20;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="vpc" source="alb" target="grafana">
+        <mxCell id="r2_alb_grafana" value="5. Forward to Grafana Pod (Port 3000)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#EA580C;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="vpc" source="alb_az1" target="grafana">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="50" y="250" />
-              <mxPoint x="195" y="250" />
+              <mxPoint x="100" y="250" />
+              <mxPoint x="245" y="250" />
             </Array>
           </mxGeometry>
         </mxCell>
 
         <!-- ROUTE 3: Outbound Egress -->
-        <mxCell id="r3_vllm_nat" value="6. Private Egress via Route Table" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#FF9900;strokeWidth=2;fontStyle=1;fontSize=10;" edge="1" parent="vpc" source="vllm_pod" target="nat_gw">
+        <mxCell id="r3_vllm_nat" value="6. Private Outbound Egress Request" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#FF9900;strokeWidth=2;fontStyle=1;fontSize=10;" edge="1" parent="vpc" source="vllm_pod" target="nat_gw">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1160" y="230" />
-              <mxPoint x="1005" y="125" />
+              <mxPoint x="1400" y="260" />
+              <mxPoint x="1030" y="260" />
             </Array>
           </mxGeometry>
         </mxCell>
 
-        <mxCell id="r3_nat_igw" value="7. Egress to HuggingFace Hub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#FF9900;strokeWidth=2;fontStyle=1;fontSize=10;" edge="1" parent="aws_region" source="nat_gw" target="huggingface">
+        <mxCell id="r3_nat_igw" value="7. Egress via NAT Gateway to HuggingFace Hub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#FF9900;strokeWidth=2;fontStyle=1;fontSize=10;" edge="1" parent="aws_region" source="nat_gw" target="huggingface">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1005" y="120" />
-              <mxPoint x="1140" y="-80" />
+              <mxPoint x="1030" y="120" />
+              <mxPoint x="1340" y="-80" />
             </Array>
           </mxGeometry>
         </mxCell>
 
-        <!-- ROUTE 4: Internal Scrape -->
-        <mxCell id="r4_prom_vllm" value="8. Scrape Token Metrics (Port 8000 /metrics)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#8B5CF6;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="eks_cluster" source="prometheus" target="vllm_pod">
+        <!-- ROUTE 4: Internal Observability Scrape -->
+        <mxCell id="r4_prom_vllm" value="8. Prometheus Scrapes Token Metrics (Port 8000 /metrics)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#8B5CF6;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="eks_cluster" source="prometheus" target="vllm_pod">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="438" y="160" />
-              <mxPoint x="955" y="160" />
+              <mxPoint x="530" y="170" />
+              <mxPoint x="1185" y="170" />
             </Array>
           </mxGeometry>
         </mxCell>
 
-        <mxCell id="r4_prom_dcgm" value="9. Scrape Hardware GPU Metrics (Port 9400)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#15803D;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="eks_cluster" source="prometheus" target="dcgm_exporter">
+        <mxCell id="r4_prom_dcgm" value="9. Prometheus Scrapes Hardware GPU Metrics (Port 9400)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthoLoop=1;jettySize=auto;html=1;strokeColor=#15803D;strokeWidth=3;fontStyle=1;fontSize=10;" edge="1" parent="eks_cluster" source="prometheus" target="dcgm_exporter">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="438" y="340" />
-              <mxPoint x="980" y="340" />
+              <mxPoint x="530" y="360" />
+              <mxPoint x="1210" y="360" />
             </Array>
           </mxGeometry>
         </mxCell>
 
-        <mxCell id="r4_dcgm_gpu" value="10. Low-level Telemetry" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthoLoop=1;jettySize=auto;html=1;strokeColor=#166534;strokeWidth=2;" edge="1" parent="gpu_nodes" source="dcgm_exporter" target="nvidia_hardware">
+        <mxCell id="r4_dcgm_gpu" value="10. Low-level Hardware GPU Telemetry" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthoLoop=1;jettySize=auto;html=1;strokeColor=#166534;strokeWidth=2;" edge="1" parent="gpu_nodes" source="dcgm_exporter" target="nvidia_hardware">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
 
